@@ -1,5 +1,5 @@
 import os, logging
-from modules import ost, alert
+from modules import  alert
 
 def windowsShell(inp):
     commands = inp.split(" ")
@@ -14,10 +14,12 @@ def windowsShell(inp):
             os.rmdir(arg)
         elif func == "alert":
             alert.alert(arg)
-        return(None)
-    else:
-        if arg == "poison":
-            ost.main()
         else:
-            stream = os.popen(arg)
+            stream = os.popen(inp)
             return(stream.read())
+    else:
+        # if inp == command:
+        #    ...
+        stream = os.popen(inp)
+        return(stream.read())
+    return(None)

